@@ -1,0 +1,52 @@
+cloudflare:
+  api-token: "oXY1Hivamz8zoYA73PGqBp5_kck58AfyQ_aFWCdU"
+  zone-id: "daa70bd4df9e5a5c095f913cfeb5af82"
+  zone-name: "laci.my"
+
+logging:
+  level:
+    root: "info"
+    org.springframework.web: "warn"
+    org.hibernate: "error"
+    hu.bruzsa: "debug"
+    sun.misc: OFF
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-4.50thread) %clr(%-5level){highlight} %clr(%-50.50logger{50}){cyan} - %clr(%msg){magenta}%n"
+#    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-5level){highlight} %clr(%logger{36}){cyan} - %msg%n"
+
+#    old logging pattern:
+#    %yellow(%d{HH:mm:ss.SSS}) [%-4.50thread] %cyan(%-50.50logger{50}) %highlight(%-5level) %-30.30M - %msg%n
+
+#    <!--    The following colors and styles are supported:-->
+#    <!--    blue-->
+#    <!--    cyan-->
+#    <!--    faint-->
+#    <!--    green-->
+#    <!--    magenta-->
+#    <!--    red-->
+#    <!--    yellow-->
+
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/dnstest
+    username: dnstest
+    password: dnstest
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  output:
+    ansi:
+      enabled: always
+  security:
+    user:
+      name: "asdf1234"
+      password: "lfsdjflksakdfjskdlfjsdkfjs21L"
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    clean-disabled: false
+#server:
+#  ssl:
+#    trust-store: "pebble.jsk"
+#    trust-store-password: "laciika"

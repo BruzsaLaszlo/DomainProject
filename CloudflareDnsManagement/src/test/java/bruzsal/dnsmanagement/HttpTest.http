@@ -1,0 +1,39 @@
+@host = http://localhost:8080
+@basicAuthHeader = Basic bGFzemxvOnBhc3N3b3Jk
+@session_cookie = inic
+
+### wrong credentials
+GET {{host}}/api/session/status
+Authorization: Basic d3Jvbmc6cGFzc3dvcmQ=
+
+### correct credentials
+GET {{host}}/api/session/user
+Authorization: {{basicAuthHeader}}
+
+{%
+// Captures the JSESSIONID for use in subsequent requests (Step 3 & 4)
+const cookieHeader = response.headers.valueOf('Set-Cookie');
+if (cookieHeader) {
+    // Corrected regex for JavaScript syntax
+    const sessionCookieMatch = cookieHeader.match(/JSESSIONID=([^;]+)/);
+    if (sessionCookieMatch) {
+        client.global.set("logout_session_cookie", sessionCookieMatch[0]);
+        client.log("Extracted JSESSIONID for logout test: {{session_cookie}}");
+    }
+}
+%}
+
+###
+GET {{host}}/api/records
+Authorization: Basic d3Jvbmc6cGFzc3dvcmQ=
+
+### add token
+POST {{host}}/api/token?apiToken=oXY1Hivamz8zoYA73PGqBp5_kck58AfyQ_aFWCdU
+Content-Type: application/json
+
+### get token
+GET {{host}}/api/token
+
+### logout
+POST {{host}}/logout
+Cookie: {{session_cookie}}
