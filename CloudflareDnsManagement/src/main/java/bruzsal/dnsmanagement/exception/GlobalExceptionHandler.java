@@ -2,6 +2,8 @@ package bruzsal.dnsmanagement.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.ErrorMessage;
 import org.springframework.context.MessageSource;
@@ -9,9 +11,11 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.io.IOException;
@@ -44,6 +48,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final MessageSource messageSource;
 
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> handleValidationException(ConstraintViolationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation error: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<String> handleValidationException(ValidationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation error: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ProblemDetail handleHttpClientErrorException(HttpClientErrorException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatus(ex.getStatusCode());
+        pd.setTitle("HTTP Client Error");
+        pd.setDetail(ex.getMessage());
+        pd.setType(URI.create("https://" + request.getServerName() + request.getContextPath()));
+        return pd;
+    }
 
     @ExceptionHandler(ResponseException.class)
     public ProblemDetail handleResponseException(ResponseException re, HttpServletRequest request) {
