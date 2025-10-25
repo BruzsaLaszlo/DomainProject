@@ -36,5 +36,14 @@ public class UserSession implements Serializable {
         }
         return zoneId;
     }
+
+    @Override
+    public String toString() {
+        return "UserSession{" +
+                "username='" + username + '\'' +
+                ", apiToken='" + apiToken + '\'' +
+                ", zoneId='" + zoneId + '\'' +
+                '}';
+    }
 }
 
