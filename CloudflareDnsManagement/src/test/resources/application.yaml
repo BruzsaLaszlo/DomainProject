@@ -6,7 +6,7 @@ cloudflare:
 logging:
   level:
     root: "info"
-    org.springframework.web: "warn"
+    org.springframework.web: "debug"
     org.hibernate: "error"
     hu.bruzsa: "debug"
     sun.misc: OFF

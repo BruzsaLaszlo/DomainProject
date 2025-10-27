@@ -7,11 +7,10 @@ import bruzsal.dnsmanagement.dto.CloudflareErrorDto;
 import bruzsal.dnsmanagement.dto.CloudflareResultDto;
 import bruzsal.dnsmanagement.dto.CloudflareResultListDto;
 import bruzsal.dnsmanagement.dto.DeleteDnsRecordDto;
-import bruzsal.dnsmanagement.dto.model.DnsRecordDto;
+import bruzsal.dnsmanagement.dto.DnsRecordDto;
 import bruzsal.dnsmanagement.exception.DnsRecordAmbiguousException;
 import bruzsal.dnsmanagement.exception.DnsRecordException;
 import bruzsal.dnsmanagement.exception.DnsRecordNotFoundException;
-import bruzsal.dnsmanagement.service.alt.IpAddress;
 import bruzsal.dnsmanagement.service.httpclient.MyObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +32,12 @@ public class DnsRecordService {
 
     private final RestClient.Builder baseRestClientBuilder;
     private final UserSession userSession;
-    private final IpAddress ipAddress;
     private final MyObjectMapper om = new MyObjectMapper();
 
     @Autowired
-    public DnsRecordService(RestClient.Builder baseRestClientBuilder, UserSession userSession, IpAddress ipAddress) {
+    public DnsRecordService(RestClient.Builder baseRestClientBuilder, UserSession userSession) {
         this.baseRestClientBuilder = baseRestClientBuilder;
         this.userSession = userSession;
-        this.ipAddress = ipAddress;
     }
 
     /**
@@ -81,7 +78,7 @@ public class DnsRecordService {
         return dnsRecordDtos.getFirst();
     }
 
-    public DnsRecordDto getDnsRecordDetailsById(String recordId) {
+    public DnsRecordDto getDnsRecordById(String recordId) {
         return Objects.requireNonNull(createClientWithApiToken()
                 .get()
                 .uri("{id}", recordId)
@@ -141,11 +138,10 @@ public class DnsRecordService {
 
     public DnsRecordDto updateDnsIpAddress(DDnsCommand dDnsCommand) {
         List<DnsRecordDto> dnsRecordDtos = getDnsRecordBy(of(dDnsCommand.getType().value), of(dDnsCommand.getDomain()), empty());
-        String myIpAddress = ipAddress.getIpAddress(dDnsCommand.getType());
         DnsRecordCommand dnsRecordCommand = new DnsRecordCommand(
                 dDnsCommand.getType().value,
                 dDnsCommand.getDomain(),
-                myIpAddress);
+                dDnsCommand.getIpAddress());
         if (dnsRecordDtos.isEmpty()) {
             return createDnsRecord(dnsRecordCommand);
         } else {

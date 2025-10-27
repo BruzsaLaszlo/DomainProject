@@ -2,7 +2,7 @@ package bruzsal.acmeclient;
 
 import bruzsal.dnsmanagement.controller.request.DnsRecordCommand;
 import bruzsal.dnsmanagement.dto.CertificatesDto;
-import bruzsal.dnsmanagement.dto.model.DnsRecordDto;
+import bruzsal.dnsmanagement.dto.DnsRecordDto;
 import bruzsal.dnsmanagement.service.DnsRecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static java.nio.file.Files.readString;

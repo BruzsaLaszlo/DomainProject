@@ -3,7 +3,7 @@ package bruzsal.dnsmanagement.service;
 import bruzsal.dnsmanagement.TestSessionConfig;
 import bruzsal.dnsmanagement.controller.request.DDnsCommand;
 import bruzsal.dnsmanagement.controller.request.DnsRecordCommand;
-import bruzsal.dnsmanagement.dto.model.DnsRecordDto;
+import bruzsal.dnsmanagement.dto.DnsRecordDto;
 import bruzsal.dnsmanagement.exception.DnsRecordAmbiguousException;
 import bruzsal.dnsmanagement.exception.DnsRecordException;
 import bruzsal.dnsmanagement.exception.DnsRecordNotFoundException;
@@ -84,11 +84,11 @@ class DnsRecordServiceIT {
 
     @Test
     void getRecordDetailsTest() {
-        DnsRecordDto dnsRecordDto = dnsRecordService.getDnsRecordDetailsById(dnsId);
+        DnsRecordDto dnsRecordDto = dnsRecordService.getDnsRecordById(dnsId);
         assertEquals(dnsId, dnsRecordDto.id());
 
         assertThatExceptionOfType(DnsRecordNotFoundException.class)
-                .isThrownBy(() -> dnsRecordService.getDnsRecordDetailsById("invalid id"))
+                .isThrownBy(() -> dnsRecordService.getDnsRecordById("invalid id"))
                 .withMessageContaining("invalid id");
     }
 
@@ -123,10 +123,10 @@ class DnsRecordServiceIT {
 
         @Test
         void updateDnsIpAddress() {
-            DDnsCommand command = new DDnsCommand(IPV4, "test.ipv4.ddns." + zoneName);
-            DnsRecordDto dnsRecordDto = dnsRecordService.updateDnsIpAddress(command);
+            DDnsCommand dDnsCommand = new DDnsCommand(IPV4, "test.ipv4.ddns." + zoneName, "127.0.0.1");
+            DnsRecordDto dnsRecordDto = dnsRecordService.updateDnsIpAddress(dDnsCommand);
             ddnsId = dnsRecordDto.id();
-            assertThat(dnsRecordDto.content()).matches("\\d*.\\d*.\\d*.\\d*");
+            assertEquals(dDnsCommand.getIpAddress(), dnsRecordDto.content());
         }
 
         @AfterAll

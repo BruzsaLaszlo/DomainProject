@@ -2,7 +2,7 @@ package bruzsal.dnsmanagement.controller.api;
 
 import bruzsal.dnsmanagement.controller.request.DDnsCommand;
 import bruzsal.dnsmanagement.controller.request.DnsRecordCommand;
-import bruzsal.dnsmanagement.dto.model.DnsRecordDto;
+import bruzsal.dnsmanagement.dto.DnsRecordDto;
 import bruzsal.dnsmanagement.service.DnsRecordService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
@@ -30,7 +30,7 @@ public class DnsRecordController {
 
     @GetMapping("/{recordId}")
     public DnsRecordDto getDnsRecord(@PathVariable String recordId) {
-        return dnsRecordService.getDnsRecordDetailsById(recordId);
+        return dnsRecordService.getDnsRecordById(recordId);
     }
 
     @GetMapping("/filter")

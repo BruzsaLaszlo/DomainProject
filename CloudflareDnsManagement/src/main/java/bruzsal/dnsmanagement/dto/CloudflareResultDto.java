@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public record CloudflareResultDto<T>(
         @NonNull
         T result,
-        @NonNull
         boolean success,
         ArrayList<String> errors,
         ArrayList<String> messages

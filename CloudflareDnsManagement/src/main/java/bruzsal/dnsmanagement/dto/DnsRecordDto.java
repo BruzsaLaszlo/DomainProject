@@ -1,4 +1,4 @@
-package bruzsal.dnsmanagement.dto.model;
+package bruzsal.dnsmanagement.dto;
 
 import java.util.ArrayList;
 import java.util.Date;

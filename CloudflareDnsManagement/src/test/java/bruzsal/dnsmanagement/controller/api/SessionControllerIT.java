@@ -3,6 +3,7 @@ package bruzsal.dnsmanagement.controller.api;
 import bruzsal.dnsmanagement.controller.session.UserSession;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.security.autoconfigure.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -18,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(
         controllers = SessionController.class,
         excludeAutoConfiguration = SecurityAutoConfiguration.class)
-public class SessionControllerIT {
+class SessionControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -56,9 +57,7 @@ public class SessionControllerIT {
 
     // --- setApiToken teszt ---
     @Test
-    void setApiToken_ShouldSetApiTokenAndReturnOk() throws Exception {
-        String apiToken = "testApiToken";
-
+    void setApiToken_ShouldSetApiTokenAndReturnOk(@Value("${cloudflare.api-token}") String apiToken) throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/session/api-token")
                         .param("apiToken", apiToken)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
@@ -80,13 +79,13 @@ public class SessionControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(content().string("ZoneID set"));
 
-        verify(userSession, times(1)).setApiToken(zoneId);
+        verify(userSession, times(1)).setZoneId(zoneId);
     }
 
     // --- clearSession teszt ---
     @Test
     void clearSession_ShouldInvalidateSessionAndReturnOk() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/session/clear"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/session/logout"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Session cleared"));
     }

@@ -7,15 +7,10 @@ import org.springframework.web.client.RestClient;
 @Component
 public class IpAddress {
 
-    private final RestClient.Builder restClient;
+    private final RestClient restClient = RestClient.create();
 
-    public IpAddress() {
-        restClient = RestClient.builder();
-
-    }
-
-    public String getIpAddress(IpAddressType ipAddressType) {
-        return restClient.build()
+    public String get(IpAddressType ipAddressType) {
+        return restClient
                 .get()
                 .uri("https://api{num}.ipify.org", ipAddressType.number)
                 .retrieve()
