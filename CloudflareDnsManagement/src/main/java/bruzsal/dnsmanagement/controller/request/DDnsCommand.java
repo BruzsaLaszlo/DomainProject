@@ -12,7 +12,11 @@ public class DDnsCommand {
 
     @NotEmpty
     private IpAddressType type;
+
     @NotEmpty
     private String domain;
+
+    @NotEmpty
+    private String ipAddress;
 
 }
