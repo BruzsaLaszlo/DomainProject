@@ -45,7 +45,7 @@ public class DnsRecordService {
      */
     private RestClient createClientWithApiToken() {
         return baseRestClientBuilder
-                .baseUrl("https://api.cloudflare.com/client/v4/zones/%s/dns_records/".formatted(userSession.getZoneId()))
+                .baseUrl("https://api.cloudflare.com/client/v4/zones/%s/dns_records".formatted(userSession.getZoneId()))
                 .defaultHeader("Authorization", "Bearer %s".formatted(userSession.getApiToken()))
                 .build();
     }
@@ -119,7 +119,7 @@ public class DnsRecordService {
     public String deleteDnsRecord(String recordId) {
         return Objects.requireNonNull(createClientWithApiToken()
                 .delete()
-                .uri("{id}", recordId)
+                .uri("/{id}", recordId)
                 .retrieve()
                 .body(new ParameterizedTypeReference<CloudflareResultDto<DeleteDnsRecordDto>>() {
                 })).result().id();

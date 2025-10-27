@@ -26,9 +26,4 @@ public class DnsManagementApplication {
         return modelMapper;
     }
 
-    @Bean
-    public HttpClient getHttpClient() {
-        return HttpClient.newBuilder().build();
-    }
-
 }
