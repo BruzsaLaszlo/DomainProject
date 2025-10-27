@@ -6,10 +6,7 @@ import bruzsal.dnsmanagement.controller.request.DnsRecordCommand;
 import bruzsal.dnsmanagement.controller.request.IpAddressType;
 import bruzsal.dnsmanagement.dto.DnsRecordDto;
 import bruzsal.dnsmanagement.service.alt.IpAddress;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,20 +35,10 @@ class DnsRecordControllerIT {
     String zoneName;
 
     static final String TYPE = "TXT";
-    static final String NAME = "test.dnsrecordcontrollerit" + new Random().nextLong();
+    static final String NAME = "testIT.dnsrecordcontrollerit" + new Random().nextLong();
     static final String CONTENT = "\"test createDnsRecords\"";
 
     String dnsRecordId;
-
-    @Test
-    void getAllRecordTest() {
-        webTestClient
-                .get()
-                .uri("/api/records")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBodyList(DnsRecordDto.class);
-    }
 
     @BeforeAll
     void createDnsRecords() {
@@ -70,7 +57,7 @@ class DnsRecordControllerIT {
         dnsRecordId = dnsRecordDto.id();
     }
 
-    @Test
+    @AfterAll
     void deleteTestDnsRecords() {
         webTestClient
                 .delete()
@@ -89,8 +76,18 @@ class DnsRecordControllerIT {
     }
 
     @Test
+    void getAllRecordTest() {
+        webTestClient
+                .get()
+                .uri("/api/records")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(DnsRecordDto.class);
+    }
+
+    @Test
     @Disabled("Warning DELETE all dns record which start with `test`")
-    void deleteAllTestDnsRecords() {
+    void deleteAllTestDnsRecordsExceptOne() {
         List<DnsRecordDto> list = webTestClient
                 .get()
                 .uri("/api/records/filterByNameStartsWith?prefix=test")
@@ -99,12 +96,15 @@ class DnsRecordControllerIT {
                 .returnResult()
                 .getResponseBody();
         assertThat(list).isNotEmpty();
-        list.forEach(dnsRecord ->
+        list.forEach(dnsRecord -> {
+            if (!dnsRecordId.equals(dnsRecord.id())) {
                 webTestClient
                         .delete()
                         .uri("/api/records/{id}", dnsRecord.id())
                         .exchange()
-                        .expectStatus().isOk());
+                        .expectStatus().isOk();
+            }
+        });
     }
 
     @Test
@@ -129,5 +129,25 @@ class DnsRecordControllerIT {
         assertEquals(name, dnsRecordDto.name());
         assertEquals(ip, dnsRecordDto.content());
     }
+
+    @Test
+    void getAllDnsRecordsNameStartsWith() {
+        String testPrefix = "testIT";
+        webTestClient
+                .get()
+                .uri("/api/records/filterByNameStartsWith?prefix={testPrefix}", testPrefix)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(DnsRecordDto.class)
+                .hasSize(1)
+                .value(dnsRecordDtos ->
+                {
+                    assertNotNull(dnsRecordDtos);
+                    DnsRecordDto dnsRecord = dnsRecordDtos.getFirst();
+                    assertNotNull(dnsRecord);
+                    assertEquals(NAME, dnsRecord.name());
+                });
+    }
+
 
 }
