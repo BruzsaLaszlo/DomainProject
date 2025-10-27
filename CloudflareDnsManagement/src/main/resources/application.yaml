@@ -60,10 +60,8 @@ logging:
     org.springframework.boot.web.embedded.tomcat.TomcatWebServer: "info"
     o.apache.tomcat.util.net.NioEndpoint.certificate: "info"
     org.hibernate: "info"
-    hu.bruzsa: "debug"
+    bruzsal.dnsmanagement.service.interceptor: "debug"
   logback:
     rollingpolicy:
       max-file-size: 10MB
       max-history: 7
-
-

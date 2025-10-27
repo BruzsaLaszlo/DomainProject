@@ -3,6 +3,7 @@ package bruzsal.dnsmanagement.config;
 import bruzsal.dnsmanagement.dto.CloudflareErrorDto;
 import bruzsal.dnsmanagement.exception.AuthenticationException;
 import bruzsal.dnsmanagement.exception.DnsRecordException;
+import bruzsal.dnsmanagement.service.interceptor.LoggingInterceptor;
 import bruzsal.dnsmanagement.service.httpclient.MyObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ public class RestClientConfig {
     @Bean
     public RestClient.Builder baseRestClientBuilder(MyObjectMapper om) {
         return RestClient.builder()
+                .requestInterceptor(new LoggingInterceptor())
                 .defaultHeader("Content-Type", "application/json")
                 .defaultStatusHandler(
                         httpStatusCode ->

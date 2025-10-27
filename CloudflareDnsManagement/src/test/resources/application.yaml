@@ -6,12 +6,12 @@ cloudflare:
 logging:
   level:
     root: "info"
-    org.springframework.web: "debug"
+#    org.springframework.web: "debug"
     org.hibernate: "error"
-    hu.bruzsa: "debug"
+    bruzsal.dnsmanagement.service.interceptor: "debug"
     sun.misc: OFF
   pattern:
-    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-4.50thread) %clr(%-5level){highlight} %clr(%-50.50logger{50}){cyan} - %clr(%msg){magenta}%n"
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-4.50thread) %clr(%-5level){highlight} %clr(%-50.50logger{50}){cyan} - %clr(%msg){faint}%n"
 #    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-5level){highlight} %clr(%logger{36}){cyan} - %msg%n"
 
 #    old logging pattern:
