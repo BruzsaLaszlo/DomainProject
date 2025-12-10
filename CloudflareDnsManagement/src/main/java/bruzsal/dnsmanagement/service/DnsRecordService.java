@@ -81,7 +81,7 @@ public class DnsRecordService {
     public DnsRecordDto getDnsRecordById(String recordId) {
         return Objects.requireNonNull(createClientWithApiToken()
                 .get()
-                .uri("{id}", recordId)
+                .uri("/{id}", recordId)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, (_, response) -> {
                     throw new DnsRecordNotFoundException("DNS not found with id: %s%n%s".formatted(recordId, response.getStatusText()));
@@ -94,7 +94,7 @@ public class DnsRecordService {
         DnsRecordDto dnsRecordDtos = getDnsSingleRecordBy(ofNullable(dnsRecordCommand.getType()), ofNullable(dnsRecordCommand.getName()), empty());
         return Objects.requireNonNull(createClientWithApiToken()
                 .patch()
-                .uri("{id}", dnsRecordDtos.id())
+                .uri("/{id}", dnsRecordDtos.id())
                 .body(dnsRecordCommand)
                 .retrieve()
                 .body(new ParameterizedTypeReference<CloudflareResultDto<DnsRecordDto>>() {
