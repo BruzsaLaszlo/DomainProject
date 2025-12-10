@@ -35,7 +35,7 @@ class DnsRecordControllerIT {
     String zoneName;
 
     static final String TYPE = "TXT";
-    static final String NAME = "testIT.dnsrecordcontrollerit" + new Random().nextLong();
+    static final String NAME = "testit.dnsrecordcontrollerit" + new Random().nextLong();
     static final String CONTENT = "\"test createDnsRecords\"";
 
     String dnsRecordId;
@@ -110,7 +110,7 @@ class DnsRecordControllerIT {
     @Test
     void updateDns(@Autowired IpAddress ipAddress) {
         IpAddressType ipAddressType = IPV4;
-        String name = "test.ddns.laci.my";
+        String name = "test.ddns.laci.lol";
         String ip = ipAddress.get(ipAddressType);
         DDnsCommand dDnsCommand = new DDnsCommand(ipAddressType, name, ip);
 
@@ -145,7 +145,7 @@ class DnsRecordControllerIT {
                     assertNotNull(dnsRecordDtos);
                     DnsRecordDto dnsRecord = dnsRecordDtos.getFirst();
                     assertNotNull(dnsRecord);
-                    assertEquals(NAME, dnsRecord.name());
+                    assertEquals(NAME + "." + zoneName, dnsRecord.name());
                 });
     }
 

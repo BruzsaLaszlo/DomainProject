@@ -1,7 +1,7 @@
 cloudflare:
   api-token: "oXY1Hivamz8zoYA73PGqBp5_kck58AfyQ_aFWCdU"
   zone-id: "daa70bd4df9e5a5c095f913cfeb5af82"
-  zone-name: "laci.my"
+  zone-name: "laci.lol"
 
 logging:
   level:

@@ -40,7 +40,7 @@ public class AcmeService {
     }
 
     public CertificatesDto createCertificate(NewCertificateCommand newCertificateCommand) {
-//        ClientTest.run(List.of("ssl5.laci.my"));
+//        ClientTest.run(List.of("ssl5.laci.lol"));
         throw new NoSuchElementException();
     }
 

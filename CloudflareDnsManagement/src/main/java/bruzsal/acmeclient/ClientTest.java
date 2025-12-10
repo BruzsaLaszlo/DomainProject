@@ -409,7 +409,7 @@ public class ClientTest {
      * @param args Domains to get a certificate for
      */
     public static void main(String... args) {
-        run(List.of("ssl4.laci.my"));
+        run(List.of("ssl4.laci.lol"));
     }
 
 }
