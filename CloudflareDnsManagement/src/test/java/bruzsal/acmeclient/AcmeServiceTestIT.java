@@ -29,7 +29,7 @@ class AcmeServiceTestIT {
 
     @Test
     void createCertificate() {
-        String domainName = "ssl3.laci.my";
+        String domainName = "test.ssl.laci.lol";
         NewCertificateCommand newCertificateCommand = new NewCertificateCommand(
                 apiToken,
                 zoneId,
