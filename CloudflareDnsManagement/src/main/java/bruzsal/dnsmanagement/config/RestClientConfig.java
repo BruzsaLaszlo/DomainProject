@@ -19,9 +19,9 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public class RestClientConfig {
 
     @Bean
-    public RestClient.Builder baseRestClientBuilder(MyObjectMapper om) {
+    public RestClient.Builder baseRestClientBuilder(MyObjectMapper om, LoggingInterceptor loggingInterceptor) {
         return RestClient.builder()
-                .requestInterceptor(new LoggingInterceptor())
+                .requestInterceptor(loggingInterceptor)
                 .defaultHeader("Content-Type", "application/json")
                 .defaultStatusHandler(
                         httpStatusCode ->

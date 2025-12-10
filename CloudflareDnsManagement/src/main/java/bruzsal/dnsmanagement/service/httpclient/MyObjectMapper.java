@@ -3,6 +3,7 @@ package bruzsal.dnsmanagement.service.httpclient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +49,16 @@ public class MyObjectMapper {
         } catch (JsonProcessingException jpe) {
             throw new IllegalArgumentException(jpe);
         }
+    }
+
+    public String writeValueAsStringPretty(String value) {
+        try {
+            JsonNode jsonNode = om.readTree(value);
+            return om.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
+        } catch (JsonProcessingException | RuntimeException _) {
+            log.error("Can not create pretty json object from: {}", value);
+        }
+        return value;
     }
 
 }

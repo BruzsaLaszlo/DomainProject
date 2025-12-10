@@ -1,17 +1,26 @@
 package bruzsal.dnsmanagement.service.interceptor;
 
+import bruzsal.dnsmanagement.service.httpclient.MyObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
+@RequiredArgsConstructor
+@Component
 public class LoggingInterceptor implements ClientHttpRequestInterceptor {
+
+    @Autowired
+    private final MyObjectMapper om;
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
@@ -30,7 +39,8 @@ public class LoggingInterceptor implements ClientHttpRequestInterceptor {
         log.debug("Method      : {}", request.getMethod());
         log.debug("Headers     : {}", request.getHeaders());
         if (body.length > 0) {
-            log.debug("Request body: {}", new String(body, StandardCharsets.UTF_8));
+            String requestBody = new String(body, StandardCharsets.UTF_8);
+            log.debug("Request body: {}", om.writeValueAsStringPretty(requestBody));
         }
         log.debug("==========================request end=================================================");
     }
@@ -40,7 +50,9 @@ public class LoggingInterceptor implements ClientHttpRequestInterceptor {
         log.debug("Status code  : {}", response.getStatusCode());
         log.debug("Status text  : {}", response.getStatusText());
         log.debug("Headers      : {}", response.getHeaders());
-        log.debug("Response body: {}", StreamUtils.copyToString(response.getBody(), StandardCharsets.UTF_8));
+        String responseBody = StreamUtils.copyToString(response.getBody(), StandardCharsets.UTF_8);
+        log.debug("Response body: {}", om.writeValueAsStringPretty(responseBody));
         log.debug("=======================response end=================================================");
     }
+
 }
